@@ -19,20 +19,13 @@ class MultiStateDownloadButton extends StatefulWidget {
       _MultiStateDownloadButtonState();
 }
 
-class _MultiStateDownloadButtonState
-    extends State<MultiStateDownloadButton> {
+class _MultiStateDownloadButtonState extends State<MultiStateDownloadButton> {
   late final DownloadController _downloadController;
 
   @override
   void initState() {
     super.initState();
-    _downloadController = SimulatedDownloadController(onOpenDownload: () {
-      _openDownload();
-    });
-  }
-
-  void _openDownload() {
-    debugPrint("open download");
+    _downloadController = SimulatedDownloadController();
   }
 
   @override
@@ -74,13 +67,11 @@ abstract class DownloadController implements ChangeNotifier {
 
 class SimulatedDownloadController extends DownloadController
     with ChangeNotifier {
-  SimulatedDownloadController({
-    DownloadStatus downloadStatus = DownloadStatus.notDownloaded,
-    double progress = 0.0,
-    required VoidCallback onOpenDownload,
-  })  : _downloadStatus = downloadStatus,
-        _progress = progress,
-        _onOpenDownload = onOpenDownload;
+  SimulatedDownloadController(
+      {DownloadStatus downloadStatus = DownloadStatus.notDownloaded,
+      double progress = 0.0})
+      : _downloadStatus = downloadStatus,
+        _progress = progress;
 
   DownloadStatus _downloadStatus;
   @override
@@ -89,8 +80,6 @@ class SimulatedDownloadController extends DownloadController
   double _progress;
   @override
   double get progress => _progress;
-
-  final VoidCallback _onOpenDownload;
 
   bool _isDownloading = false;
 
@@ -114,7 +103,7 @@ class SimulatedDownloadController extends DownloadController
   @override
   void openDownload() {
     if (downloadStatus == DownloadStatus.downloaded) {
-      _onOpenDownload();
+      debugPrint("open download");
     }
   }
 
