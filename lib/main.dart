@@ -171,7 +171,7 @@ class ButtonShapeWidget extends StatelessWidget {
           opacity: isDownloading || isFetching ? 0.0 : 1.0,
           curve: Curves.ease,
           child: Text(
-            isDownloaded ? 'OPEN' : 'GET',
+            isDownloaded ? "打开" : "下载",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.blue,
