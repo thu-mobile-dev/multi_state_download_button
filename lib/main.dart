@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:multi_state_download_button/controller.dart';
+import 'package:multi_state_download_button/extension.dart';
 
 void main() {
   runApp(
@@ -25,7 +27,7 @@ class _MultiStateDownloadButtonState extends State<MultiStateDownloadButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 96,
+      width: ScreenSize.shorterSide(context, percentage: 1 / 2),
       child: AnimatedBuilder(
         animation: _downloadController,
         builder: (context, child) {
@@ -110,9 +112,10 @@ class DownloadButton extends StatelessWidget {
                     isFetching: _isFetching,
                   ),
                   if (_isDownloading)
-                    const Icon(
+                    Icon(
                       Icons.stop,
-                      size: 14,
+                      size: ScreenSize.shorterSide(context,
+                          percentage: 1 / 2 * 1 / 4),
                       color: Colors.blue,
                     ),
                 ],
@@ -148,9 +151,9 @@ class ButtonShapeWidget extends StatelessWidget {
     );
 
     if (isDownloading || isFetching) {
-      shape = ShapeDecoration(
-        shape: const CircleBorder(),
-        color: Colors.white.withOpacity(0),
+      shape = const ShapeDecoration(
+        shape: CircleBorder(),
+        color: Colors.white,
       );
     }
 
@@ -160,7 +163,9 @@ class ButtonShapeWidget extends StatelessWidget {
       width: double.infinity,
       decoration: shape,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.symmetric(
+            vertical:
+                ScreenSize.shorterSide(context, percentage: 1 / 2 * 1 / 12)),
         child: AnimatedOpacity(
           duration: transitionDuration,
           opacity: isDownloading || isFetching ? 0.0 : 1.0,
@@ -168,10 +173,11 @@ class ButtonShapeWidget extends StatelessWidget {
           child: Text(
             isDownloaded ? 'OPEN' : 'GET',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
+            style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+                fontSize:
+                    ScreenSize.shorterSide(context, percentage: 1 / 2 * 1 / 6)),
           ),
         ),
       ),
@@ -201,11 +207,11 @@ class ProgressIndicatorWidget extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         builder: (context, progress, child) {
           return CircularProgressIndicator(
-            backgroundColor:
-                isDownloading ? Colors.grey[200] : Colors.white.withOpacity(0),
+            backgroundColor: isDownloading ? Colors.grey[200] : Colors.white,
             valueColor: AlwaysStoppedAnimation(
                 isFetching ? Colors.grey[200] : Colors.blue),
-            strokeWidth: 2,
+            strokeWidth:
+                ScreenSize.shorterSide(context, percentage: 1 / 2 * 1 / 36),
             value: isFetching ? null : progress,
           );
         },
