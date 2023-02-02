@@ -4,119 +4,53 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     const MaterialApp(
-      home: ExampleCupertinoDownloadButton(),
+      home: Scaffold(body: Center(child: MultiStateDownloadButton())),
       debugShowCheckedModeBanner: false,
     ),
   );
 }
 
 @immutable
-class ExampleCupertinoDownloadButton extends StatefulWidget {
-  const ExampleCupertinoDownloadButton({super.key});
+class MultiStateDownloadButton extends StatefulWidget {
+  const MultiStateDownloadButton({super.key});
 
   @override
-  State<ExampleCupertinoDownloadButton> createState() =>
-      _ExampleCupertinoDownloadButtonState();
+  State<MultiStateDownloadButton> createState() =>
+      _MultiStateDownloadButtonState();
 }
 
-class _ExampleCupertinoDownloadButtonState
-    extends State<ExampleCupertinoDownloadButton> {
-  late final List<DownloadController> _downloadControllers;
+class _MultiStateDownloadButtonState
+    extends State<MultiStateDownloadButton> {
+  late final DownloadController _downloadController;
 
   @override
   void initState() {
     super.initState();
-    _downloadControllers = List<DownloadController>.generate(
-      20,
-      (index) => SimulatedDownloadController(onOpenDownload: () {
-        _openDownload(index);
-      }),
-    );
+    _downloadController = SimulatedDownloadController(onOpenDownload: () {
+      _openDownload();
+    });
   }
 
-  void _openDownload(int index) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Open App ${index + 1}'),
-      ),
-    );
+  void _openDownload() {
+    debugPrint("open download");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Apps')),
-      body: ListView.separated(
-        itemCount: _downloadControllers.length,
-        separatorBuilder: (_, __) => const Divider(),
-        itemBuilder: _buildListItem,
-      ),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, int index) {
-    final theme = Theme.of(context);
-    final downloadController = _downloadControllers[index];
-
-    return ListTile(
-      leading: const DemoAppIcon(),
-      title: Text(
-        'App ${index + 1}',
-        overflow: TextOverflow.ellipsis,
-        style: theme.textTheme.titleLarge,
-      ),
-      subtitle: Text(
-        'Lorem ipsum dolor #${index + 1}',
-        overflow: TextOverflow.ellipsis,
-        style: theme.textTheme.bodySmall,
-      ),
-      trailing: SizedBox(
-        width: 96,
-        child: AnimatedBuilder(
-          animation: downloadController,
-          builder: (context, child) {
-            return DownloadButton(
-              status: downloadController.downloadStatus,
-              downloadProgress: downloadController.progress,
-              onDownload: downloadController.startDownload,
-              onCancel: downloadController.stopDownload,
-              onOpen: downloadController.openDownload,
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-@immutable
-class DemoAppIcon extends StatelessWidget {
-  const DemoAppIcon({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const AspectRatio(
-      aspectRatio: 1,
-      child: FittedBox(
-        child: SizedBox(
-          width: 80,
-          height: 80,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.red, Colors.blue],
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Center(
-              child: Icon(
-                Icons.ac_unit,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-          ),
-        ),
+    final downloadController = _downloadController;
+    return SizedBox(
+      width: 96,
+      child: AnimatedBuilder(
+        animation: downloadController,
+        builder: (context, child) {
+          return DownloadButton(
+            status: downloadController.downloadStatus,
+            downloadProgress: downloadController.progress,
+            onDownload: downloadController.startDownload,
+            onCancel: downloadController.stopDownload,
+            onOpen: downloadController.openDownload,
+          );
+        },
       ),
     );
   }
